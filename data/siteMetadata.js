@@ -11,10 +11,8 @@ const siteMetadata = {
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
   email: 'scottlee0191@gmail.com',
-  github: 'https://github.com',
-  twitter: 'https://twitter.com/Twitter',
-  facebook: 'https://facebook.com',
-  youtube: 'https://youtube.com',
+  github: 'https://github.com/scottlee0191',
+  twitter: 'https://twitter.com/ScottLee0191',
   linkedin: 'https://www.linkedin.com',
   locale: 'en-US',
   analytics: {
