@@ -58,7 +58,7 @@ const securityHeaders = [
 module.exports = withBundleAnalyzer({
   images: {
     loader: 'imgix',
-    path: 'https://scottlee0191.github.io/scottlee',
+    path: 'https://scottlee0191.github.io/scottlee/docs',
   },
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH,
