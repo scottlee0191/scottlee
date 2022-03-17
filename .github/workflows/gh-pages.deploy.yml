@@ -13,7 +13,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [14.x]
+                node-version: [16.x]
 
 
         steps:
@@ -27,6 +27,8 @@ jobs:
               run: npm ci
             - name: Build project
               run: npm run build
+              env:
+                  - NEXT_PUBLIC_BASE_PATH: scottlee/
             - name: Export static files
               run: npm run export
             - name: Add .nojekyll file
