@@ -23,12 +23,14 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: ${{ matrix.node-version }}
+            -   name: create env file
+                    run: |
+                        touch .env
+                        echo NEXT_PUBLIC_BASE_PATH=/scottlee >> .env
             - name: Install packages
               run: npm ci
             - name: Build project
               run: npm run build
-              env:
-                  - NEXT_PUBLIC_BASE_PATH: scottlee/
             - name: Export static files
               run: npm run export
             - name: Add .nojekyll file
