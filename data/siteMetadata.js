@@ -13,7 +13,7 @@ const siteMetadata = {
   email: 'scottlee0191@gmail.com',
   github: 'https://github.com/scottlee0191',
   twitter: 'https://twitter.com/ScottLee0191',
-  linkedin: 'https://www.linkedin.com',
+  linkedin: 'https://www.linkedin.com/in/scott-l%C3%AA-a12bb7234/',
   locale: 'en-US',
   analytics: {
     // If you want to use an analytics provider you have to add it to the

@@ -1,16 +1,15 @@
 ---
-name: Tails Azimuth
+name: Scottlee
 avatar: /static/images/avatar.png
-occupation: Professor of Atmospheric Science
-company: Stanford University
-email: address@yoursite.com
-twitter: https://twitter.com/Twitter
-linkedin: https://www.linkedin.com
-github: https://github.com
+occupation: Fullstack developer
+company: NFQ
+email: scottlee0191@gmail.com
+twitter: https://twitter.com/ScottLee0191
+linkedin: https://www.linkedin.com/in/scott-l%C3%AA-a12bb7234/
+github: https://github.com/scottlee0191
 ---
 
-Tails Azimuth is a professor of atmospheric sciences at the Stanford AI Lab. His research interests includes complexity modelling of tailwinds, headwinds and crosswinds.
-
-He leads the clean energy group which develops 3D air pollution-climate models, writes differential equation solvers, and manufactures titanium plated air ballons. In his free time he bakes raspberry pi.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate.
+•   6+ years experienced in software development.
+•	Excellent communication, positive attitude, teamwork.
+•	Training and help members develop in career path.
+•	Interested in R&D for new technologies.
