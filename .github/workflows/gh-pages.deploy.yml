@@ -27,6 +27,11 @@ jobs:
               run: |
                 touch .env
                 echo NEXT_PUBLIC_BASE_PATH=/scottlee >> .env
+                echo NEXT_PUBLIC_GISCUS_REPO=scottlee0191/scottlee >> .env
+                echo NEXT_PUBLIC_GISCUS_REPOSITORY_ID=R_kgDOG_ScyQ >> .env
+                echo NEXT_PUBLIC_GISCUS_CATEGORY=General >> .env
+                echo NEXT_PUBLIC_GISCUS_CATEGORY_ID=DIC_kwDOG_Scyc4COK8f >> .env
+
             - name: Install packages
               run: npm ci
             - name: Build project
