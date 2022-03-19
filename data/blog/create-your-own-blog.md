@@ -1,0 +1,119 @@
+---
+title: 'Create your own blog'
+date: '2022-03-19'
+tags: ['next-js', 'tailwind', 'guide', 'markdown', 'reactjs']
+draft: false
+summary: 'Guide create own blog in the internet, nextjs static site generation, tailwindcss, reactjs and then automatic deploy by GitHub action!'
+layout: PostSimple
+---
+
+Guide to create own blog in the internet, nextjs static site generation, tailwindcss, reactjs and then automatic deploy by GitHub action!
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Using template or build from scratch.
+Nowadays, we have a lot website support write blog share knowledge for developer like medium.com, dev.to... But it hard to customize and
+you are not admin so your posts can be deleted if they delete because it belongs to their system.
+So how about building form scratch it may be hurt like we need buy a host, domain ex,... Luckily, we have a ton of
+blog system come from GitHub. so I dedicated use `https://github.com/timlrx/tailwind-nextjs-starter-blog` it's awesome
+template free markdown, MDX, nextjs, tailwindcss,... come with ton of feature out of the box,...
+## Setup environment
+As I mention before we're using GitHub page to deploy static site, so we're using GitHub for git
+#### First step clone source
+You can clone it from github or using command
+```
+npx degit timlrx/tailwind-nextjs-starter-blog#typescript
+```
+run project in local
+```
+yarn install && yarn dev
+```
+#### Custom template
+The template using nextjs and markdown for content so feel free to custom for yourself. when you are done with
+color theme time to deploy it to GitHub page.
+#### Create GitHub repo and push export to GitHub page branch
+add script export to section script in package.json file to export static file
+```
+    "export": "next export",
+```
+push to GitHub page branch
+```
+git checkout --orphan gh-pages
+git reset
+git commit --allow-empty -m "Initial commit"
+git push --set-upstream origin gh-pages
+```
+#### GitHub Actions
+In general, we need to push static file GitHub page branch when we have change in markdown or code. using GitHub action
+help our job simple. We just need push the code and everything GitHub action do the rest.
+Create GitHub action config file
+```
+touch .github/workflows/gh-pages.deploy.yml 
+```
+Write the pipeline config
+```
+name: Deploy to GitHub Pages
+
+
+on:
+    push:
+        branches: [main]
+
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+
+        strategy:
+            matrix:
+                node-version: [16.x]
+
+
+        steps:
+            - name: Get files
+              uses: actions/checkout@v2
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: create env file
+              run: |
+                touch .env
+                echo NEXT_PUBLIC_BASE_PATH=/scottlee >> .env
+                echo NEXT_PUBLIC_GISCUS_REPO=scottlee0191/scottlee >> .env
+                echo NEXT_PUBLIC_GISCUS_REPOSITORY_ID=R_kgDOG_ScyQ >> .env
+                echo NEXT_PUBLIC_GISCUS_CATEGORY=General >> .env
+                echo NEXT_PUBLIC_GISCUS_CATEGORY_ID=DIC_kwDOG_Scyc4COK8f >> .env
+
+            - name: Install packages
+              run: npm ci
+            - name: Build project
+              run: npm run build
+            - name: Export static files
+              run: npm run export
+            - name: Add .nojekyll file
+              run: touch ./out/.nojekyll
+            - name: Deploy
+              uses: JamesIves/github-pages-deploy-action@4.1.1
+              with:
+                  branch: gh-pages
+                  folder: out
+```
+push code to GitHub and make a cup of coffee enjoin your website live
+## Issue you may have
+#### Can build because next/image can not build
+You can fix it by add config for image page
+```
+  images: {
+    loader: 'imgix',
+    path: your_git_hub_page_url,
+  },
+```
+put this config to next.config.js
+#### Pipeline not working
+This one happen because your config not correct try to fix pipeline or fix eslint
+before run build locally without issue and then push
+## Thanks!
+Thanks for reading this article. If have any question or any support to make it work like me feel free to leave a comment here I'm wiling to support.
+
