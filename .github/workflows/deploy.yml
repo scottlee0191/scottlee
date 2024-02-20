@@ -65,9 +65,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: yarn install
       - name: Build project assets
-        run: ${{ steps.detect-package-manager.outputs.manager }} build
+        run: yarn build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
