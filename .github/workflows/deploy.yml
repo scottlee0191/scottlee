@@ -27,8 +27,6 @@ concurrency:
 jobs:
   # Build job
   build:
-    env:
-      YARN_ENABLE_IMMUTABLE_INSTALLS: false
     name: Build Nextjs Blog
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +52,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Restore cache
         uses: actions/cache@v3
