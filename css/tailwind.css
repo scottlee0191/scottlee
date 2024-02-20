@@ -22,6 +22,11 @@
   @apply my-5;
 }
 
+.logo {
+  background: -webkit-linear-gradient(315deg, rgb(34, 197, 94) 25%, #647eff);
+  background-clip: text;
+}
+
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
