@@ -89,5 +89,6 @@ module.exports = () => {
 
       return config
     },
+    basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   })
 }
