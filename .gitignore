@@ -15,6 +15,7 @@
 # next.js
 /.next/
 public/sitemap.xml
+out
 .vercel
 
 # production
