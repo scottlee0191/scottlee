@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://scottlee0191.github.io/scottlee
+Sitemap: https://scottlee0191.github.io/scottlee/sitemap.xml
