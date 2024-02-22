@@ -71,6 +71,10 @@ module.exports = () => {
           protocol: 'https',
           hostname: 'picsum.photos',
         },
+        {
+          protocol: 'https',
+          hostname: 'github.io',
+        },
       ],
     },
     async headers() {
@@ -90,7 +94,7 @@ module.exports = () => {
       return config
     },
     basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-    output: 'export',
-    distDir: 'out',
+    // output: 'export',
+    // distDir: 'out',
   })
 }
