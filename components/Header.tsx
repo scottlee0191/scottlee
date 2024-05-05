@@ -5,6 +5,7 @@ import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import LogoType from './LogoType'
 
 const Header = () => {
   return (
@@ -14,7 +15,7 @@ const Header = () => {
         aria-label={siteMetadata.headerTitle}
         className="logo block text-5xl font-bold text-transparent"
       >
-        {siteMetadata.headerTitle}
+        <LogoType />
       </Link>
       <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
         {headerNavLinks

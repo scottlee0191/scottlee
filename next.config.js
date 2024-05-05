@@ -53,6 +53,8 @@ const securityHeaders = [
     value: 'camera=(), microphone=(), geolocation=()',
   },
 ]
+const exportConfig =
+  process.env.NODE_ENV === 'production' ? { output: 'export', distDir: 'out' } : {}
 
 /**
  * @type {import('next/dist/next-server/server/config').NextConfig}
@@ -95,7 +97,6 @@ module.exports = () => {
       return config
     },
     basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-    output: 'export',
-    distDir: 'out',
+    ...exportConfig,
   })
 }
