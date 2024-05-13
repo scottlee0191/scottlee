@@ -1,0 +1,269 @@
+---
+title: 'Create gallery app'
+date: '2024-05-08'
+tags: ['next-js', 'tailwind', 'guide', 'markdown', 'reactjs', 'uploadthing', 'next-auth']
+draft: false
+summary: 'This project is a gallery application that allows users to upload and view images.'
+---
+## Project Description
+This project is a gallery application that allows users to upload and view images. It utilizes various technologies and features such as:
+
+- Shadcn for image manipulation and effects.
+- Prisma ORM Kit for database operations.
+- Next Auth for authentication and user management.
+- Parallel routes for login and registration models.
+- Image upload functionality.
+- Home page with a list of images.
+- Pagination for the image list.
+- Image detail view with a modal.
+- Responsive design for optimal viewing on different devices.
+- UI improvements to enhance the user experience.
+
+The project is currently in progress and the next step is to deploy it to Vercel for production use.
+
+<TOCInline toc={props.toc} asDisclosure />
+
+## Project url
+https://galery-rust-one.vercel.app/
+https://github.com/scottlee0191/galery
+
+## UI shadcn tailwindcss
+
+Shadcn is beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Easy-to-use. it's a great way to enhance the UI of your application.
+
+```bash
+npx shadcn-ui@latest init
+```
+choose default option and then you can use it in your project
+
+example for button component
+
+```bash
+npx shadcn-ui@latest add button
+```
+then look up on '/component/ui/button.tsx' we can custom button style here or event variant for button
+
+## Next auth for authentication
+
+Auth.js is a runtime agnostic library based on standard Web APIs that integrates deeply with multiple modern JavaScript frameworks to provide an authentication experience that’s simple to get started with, easy to extend, and always private and secure!
+
+Flow this guide to install next auth for our project
+https://authjs.dev/getting-started/installation?framework=next.js
+we will github provider for authentication in this project flow this guide to setup github provider
+https://authjs.dev/getting-started/authentication/oauth
+that's it. we now setup authentication for our project
+
+## Prisma orm kit
+
+Prisma is a modern database toolkit that makes it easy to work with databases in your application. With Prisma, you can define your data model using a simple schema and Prisma will generate the necessary code to interact with your database.
+
+Flow this guide to install prisma for our project
+https://vercel.com/guides/nextjs-prisma-postgres
+we will use postgresql for our database in this project flow this guide to setup postgresql
+And https://authjs.dev/getting-started/adapters/prisma to setup prisma adapter for next auth
+one small thing need to add model image to prisma schema
+
+```prisma
+model Image {
+  id        String   @id() @default(uuid())
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+```
+run this command to generate prisma client
+
+```bash
+npm exec prisma migrate dev --name init
+```
+now we have prisma client to interact with database
+
+## parallel route for login and register model
+
+Parallel Routes allows you to simultaneously or conditionally render one or more pages within the same layout. They are useful for highly dynamic sections of an app, such as dashboards and feeds on social sites.
+
+### create login page at 'app/login/page.tsx'
+### create modal route intercept at 'app/@auth/(.)login/page.tsx', remember to add 'app/@auth/default.tsx' return null to file to render as a fallback for unmatched slots during the initial load or full-page reload.
+
+That's it now we have login page and modal route for login page and when reload login page will show login page when click login button will show modal login page.
+
+## upload images use uploadthing
+
+UploadThing is the easiest way to add file uploads to your full stack TypeScript application. Many services have tried to build a "better S3", but in our opinion, none found the right compromise of ownership, flexibility and safety.
+
+Flow this guide to install uploadthing for our project https://docs.uploadthing.com/getting-started/appdir
+
+create upload component we not use defualt because we don't need show default upload button
+
+```tsx
+"use client";
+
+import { useUploadThing } from "@/lib/uploadthing";
+import { Loader2, UploadCloudIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent } from "react";
+import { toast } from "sonner";
+
+export default function Upload() {
+  const router = useRouter();
+  const { startUpload } = useUploadThing("imageUploader", {
+    onClientUploadComplete: () => {
+      toast.dismiss("begin");
+      toast.success("Upload successfully!");
+      router.refresh();
+    },
+    onUploadError: (error: Error) => {
+      toast.dismiss("begin");
+      toast.error(error.message);
+    },
+    onUploadBegin: () => {
+      toast(
+        <div className="flex items-center gap-2">
+          <Loader2 className="animate-spin" />
+          Uploading...
+        </div>,
+        { id: "begin", duration: 100000 }
+      );
+    },
+  });
+  function onchange(e: ChangeEvent<HTMLInputElement>) {
+    const { files } = e.currentTarget;
+    if (files?.length) {
+      startUpload(Object.values(files));
+    }
+  }
+
+  return (
+    <div>
+      <label htmlFor="upload" className="cursor-pointer">
+        <UploadCloudIcon />
+      </label>
+      <input
+        type="file"
+        id="upload"
+        accept="image/*"
+        onChange={onchange}
+        className="sr-only"
+      />
+    </div>
+  );
+}
+```
+
+## list images home
+### create snerio to authenicate user redirect to dashboard page
+To achieve this we need to create a snerio to check if user is authenticated or not if not redirect to login page we need to modify 'auth.ts' file callbacks option like this.
+
+```tsx
+ callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", nextUrl));
+      }
+      return true;
+    },
+  },
+```
+
+```tsx
+### create dashboard page at 'app/dashboard/page.tsx'
+inside this component call fetch from database
+```tsx
+  const image = await prisma.image.findFirst();
+```
+so nextjs know we fetch data from database and will generate static page for us when we build the project
+to avoid this we need to set dynamic at the top this component because when we upload another image we need to update this page also.
+```tsx
+export const dynamic = "force-dynamic";
+```
+### handle Pagination
+To handle pagination we need to create a new component to handle pagination like this
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { prisma } from "@/lib";
+
+export default async function Page({ page }: { page: number }) {
+  const imageCount = await prisma.image.count();
+  const perPage = +(process.env.PER_PAGE ?? 6);
+  if (imageCount < perPage) return null;
+  const pages = Math.ceil(imageCount / perPage);
+
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            aria-disabled={page <= 1}
+            href={`/dashboard/?page=${page - 1}`}
+          />
+        </PaginationItem>
+        {Array.from({ length: pages }).map((_, index) => {
+          const currentPage = index + 1;
+          return (
+            <PaginationItem key={currentPage}>
+              <PaginationLink
+                aria-disabled={currentPage === page}
+                isActive={currentPage === page}
+                href={`/dashboard/?page=${currentPage}`}
+              >
+                {currentPage}
+              </PaginationLink>
+            </PaginationItem>
+          );
+        })}
+
+        <PaginationItem>
+          <PaginationNext
+            aria-disabled={page >= Math.ceil(imageCount / perPage)}
+            href={`/dashboard/?page=${page + 1}`}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}
+```
+## Images detail with modal like login modal create modal route intercept.
+
+### create modal route intercept at 'app/@image/(.)detail/page.tsx', remember to add 'app/@image/default.tsx' return null to file to render as a fallback for unmatched slots during the initial load or full-page reload.
+
+## Deploy to vercel
+
+GitHub Copilot
+To deploy a Next.js app to Vercel using GitHub, you can follow these steps:
+
+Create a new repository on GitHub to host your Next.js app.
+
+Push your Next.js app code to the GitHub repository.
+
+Go to the Vercel website (vercel.com) and sign in with your GitHub account.
+
+Click on the "Import Project" button.
+
+Select your GitHub repository from the list.
+
+Configure the deployment settings, such as the branch to deploy and the build command.
+
+Click on the "Deploy" button to start the deployment process.
+
+Vercel will automatically build and deploy your Next.js app whenever you push changes to the selected branch on GitHub.
+
+## Thanks!
+
+Thanks for reading this article. If have any question or any support to make it work like me feel free to leave a comment here I'm wiling to support.
