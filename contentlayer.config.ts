@@ -149,7 +149,8 @@ export default makeSource({
       rehypePresetMinify,
     ],
   },
-  onSuccess: async (importData) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSuccess: async (importData: any) => {
     const { allBlogs } = await importData()
     createTagCount(allBlogs)
     createSearchIndex(allBlogs)
